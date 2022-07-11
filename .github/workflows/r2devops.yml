@@ -1,22 +1,20 @@
-# R2Devops.io pipeline template - this template aims to generate a complete pipeline
+# R2Devops.io pipeline generation
 #
-# Inputs:
-#   - List of technologies detected in the project : go, go checksums, go module, ignore list, yaml,
+# List of technologies detected in the project : golang, yaml, 
 
 name: R2Devops
 on:
   push:
-    branches: [ main]
+    branches: [ main, r2devops]
   pull_request:
     branches: [ main ]
 
 jobs:
-
-
-  build:
+  go-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Go
         uses: actions/setup-go@v2
 
@@ -25,3 +23,12 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: gitleaks-action
+      uses: zricethezav/gitleaks-action@master
+
+
